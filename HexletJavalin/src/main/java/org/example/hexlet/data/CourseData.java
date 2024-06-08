@@ -5,7 +5,7 @@ import org.example.hexlet.model.Course;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Data {
+public class CourseData {
     public static List<Course> getCourses() {
         List<Course> courses = new ArrayList<>();
         Course c1 = new Course("Java", "course description");
