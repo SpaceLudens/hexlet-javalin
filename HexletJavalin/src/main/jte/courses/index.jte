@@ -3,6 +3,10 @@
 
 @template.layout.page(
 content = @`
+    <form action="/courses" method="get">
+        <input type="search" name="term" value="${page.getTerm()}">
+        <input type="submit" value="Искать">
+    </form>
     <div style="row row-cols-md-3 mb-3">
         <table class="table table-striped">
             <tr >

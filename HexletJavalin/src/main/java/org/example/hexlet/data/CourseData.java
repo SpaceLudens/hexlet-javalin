@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CourseData {
     public static List<Course> getCourses() {
-        List<Course> courses = new ArrayList<>();
+        ArrayList<Course> courses = new ArrayList<>();
         Course c1 = new Course("Java", "course description");
         Course c2 = new Course("Python", "course description");
         Course c3 = new Course("JavaScript", "course description");
