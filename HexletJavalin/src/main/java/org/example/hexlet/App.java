@@ -6,8 +6,11 @@ import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import static org.eclipse.jetty.util.StringUtil.startsWithIgnoreCase;
 
+import io.javalin.validation.ValidationException;
+import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
@@ -27,7 +30,8 @@ public class App {
         app.get("/", ctx -> ctx.render("index.jte"));
 
         app.get("/courses/build", ctx -> {
-            ctx.render("courses/build.jte");
+            var page = new BuildCoursePage();
+            ctx.render("courses/build.jte", model("page", page));
         });
         app.get("/courses/{id}", ctx -> {
             var id = ctx.pathParam("id");
@@ -53,16 +57,27 @@ public class App {
             ctx.render("courses/index.jte", model("page", page));
         });
         app.post("/courses", ctx -> {
-            var name = ctx.formParam("name");
-            var description = ctx.formParam("description");
-
-            var course = new Course(name, description);
-            CourseRepository.save(course);
-            ctx.redirect("/courses");
+            try {
+                var name = ctx.formParamAsClass("name", String.class)
+                        .check(val -> val.length() > 2, "Длинна названия курса не может быть меньше 2 символов")
+                        .get();
+                var description = ctx.formParamAsClass("description", String.class)
+                        .check(val -> val.length() > 10, "Длинна описания курса не может быть меньше 10 символов")
+                        .get();
+                var course = new Course(name, description);
+                CourseRepository.save(course);
+                ctx.redirect("/courses");
+            } catch (ValidationException e) {
+                var name = ctx.formParam("name");
+                var description = ctx.formParam("description");
+                var page = new BuildCoursePage(name, description, e.getErrors());
+                ctx.render("courses/build.jte", model("page", page));
+            }
         });
 
         app.get("/users/build", ctx -> {
-           ctx.render("users/build.jte");
+            var page = new BuildUserPage();
+           ctx.render("users/build.jte", model("page", page));
         });
         app.get("/users/{id}", ctx -> {
             var id = ctx.pathParam("id");
@@ -89,12 +104,22 @@ public class App {
         app.post("/users", ctx -> {
             var name = ctx.formParam("name");
             var email = ctx.formParam("email");
-            var password = ctx.formParam("password").toLowerCase();
-            var passwordConfirmation = ctx.formParam("passwordConfirmation");
 
-            var user = new User(name, email, password);
-            UserRepository.save(user);
-            ctx.redirect("/users");
+            try {
+                var passwordConfirmation = ctx.formParam("passwordConfirmation");
+                var password = ctx.formParamAsClass("password", String.class)
+                        .check(val -> val.equals(passwordConfirmation), "Пароли не совпадают")
+                        .check(val -> val.length() > 6, "У пароля недостаточная длинна")
+                        .get();
+                var user = new User(name, email, password);
+                UserRepository.save(user);
+                ctx.redirect("/users");
+            } catch (ValidationException e) {
+                var page = new BuildUserPage(name, email, e.getErrors());
+                ctx.render("users/build.jte", model("page", page));
+            }
+
+
         });
 
         app.start(7070);
