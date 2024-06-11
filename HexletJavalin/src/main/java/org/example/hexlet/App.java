@@ -5,6 +5,7 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import static org.eclipse.jetty.util.StringUtil.startsWithIgnoreCase;
+import static org.example.hexlet.util.NamedRoutes.*;
 
 import io.javalin.validation.ValidationException;
 import org.example.hexlet.dto.courses.BuildCoursePage;
@@ -28,12 +29,13 @@ public class App {
         });
 
         app.get("/", ctx -> ctx.render("index.jte"));
-
-        app.get("/courses/build", ctx -> {
+        //COURSES
+        app.get(buildCoursePath(), ctx -> {
             var page = new BuildCoursePage();
             ctx.render("courses/build.jte", model("page", page));
         });
-        app.get("/courses/{id}", ctx -> {
+
+        app.get(coursePath("{id}"), ctx -> {
             var id = ctx.pathParam("id");
             var course = CourseRepository.getEntities().stream()
                     .filter(c -> c.getId() == Integer.parseInt(id))
@@ -43,7 +45,7 @@ public class App {
             ctx.render("courses/show.jte", model("page", page));
         });
 
-        app.get("/courses", ctx -> {
+        app.get(coursePath(), ctx -> {
             var term = ctx.queryParam("term");
             List<Course> courses;
             if (term != null) {
@@ -56,7 +58,8 @@ public class App {
             var page = new CoursesPage(courses, term);
             ctx.render("courses/index.jte", model("page", page));
         });
-        app.post("/courses", ctx -> {
+
+        app.post(coursePath(), ctx -> {
             try {
                 var name = ctx.formParamAsClass("name", String.class)
                         .check(val -> val.length() > 2, "Длинна названия курса не может быть меньше 2 символов")
@@ -74,12 +77,13 @@ public class App {
                 ctx.render("courses/build.jte", model("page", page));
             }
         });
-
-        app.get("/users/build", ctx -> {
+        //USERS
+        app.get(buildUserPath(), ctx -> {
             var page = new BuildUserPage();
            ctx.render("users/build.jte", model("page", page));
         });
-        app.get("/users/{id}", ctx -> {
+
+        app.get(userPath("{id}"), ctx -> {
             var id = ctx.pathParam("id");
             var user = UserRepository.getEntities().stream()
                     .filter(c -> c.getId() == Integer.parseInt(id))
@@ -88,7 +92,8 @@ public class App {
             var page = new UserPage(user);
             ctx.render("users/show.jte", model("page", page));
         });
-        app.get("/users", ctx -> {
+
+        app.get(userPath(), ctx -> {
             var term = ctx.queryParam("term");
             List<User> users;
             if (term != null) {
@@ -101,7 +106,8 @@ public class App {
             var page = new UsersPage(users, term);
             ctx.render("users/index.jte", model("page", page));
         });
-        app.post("/users", ctx -> {
+
+        app.post(userPath(), ctx -> {
             var name = ctx.formParam("name");
             var email = ctx.formParam("email");
 
@@ -121,7 +127,6 @@ public class App {
 
 
         });
-
         app.start(7070);
     }
 }
