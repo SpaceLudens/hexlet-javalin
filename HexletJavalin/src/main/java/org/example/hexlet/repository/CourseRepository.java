@@ -27,4 +27,8 @@ public class CourseRepository {
                 .filter(entity -> entity.getId() == id)
                 .findAny();
     }
+
+    public static void delete(Long id) {
+
+    }
 }

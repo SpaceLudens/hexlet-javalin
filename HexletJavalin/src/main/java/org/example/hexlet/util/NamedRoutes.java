@@ -1,35 +1,35 @@
 package org.example.hexlet.util;
 
 public class NamedRoutes {
-    public static String userPath() {
+    public static String usersPath() {
         return "/users";
     }
 
-    public static String buildUserPath() {
+    public static String buildUsersPath() {
         return "/users/build";
     }
 
-    public static String userPath(Long id) {
-        return userPath(String.valueOf(id));
+    public static String usersPath(Long id) {
+        return usersPath(String.valueOf(id));
     }
 
-    public static String userPath(String id) {
+    public static String usersPath(String id) {
         return "/users/" + id;
     }
 
-    public static String coursePath() {
+    public static String coursesPath() {
         return "/courses";
     }
 
-    public static String buildCoursePath() {
+    public static String buildCoursesPath() {
         return "/courses/build";
     }
 
-    public static String coursePath(Long id) {
-        return coursePath(String.valueOf(id));
+    public static String coursesPath(Long id) {
+        return coursesPath(String.valueOf(id));
     }
 
-    public static String coursePath(String id) {
+    public static String coursesPath(String id) {
         return "/courses/" + id;
     }
 }
