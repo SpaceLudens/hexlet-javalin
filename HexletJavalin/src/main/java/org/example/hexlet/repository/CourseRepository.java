@@ -5,6 +5,7 @@ import org.example.hexlet.model.Course;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CourseRepository {
@@ -24,7 +25,7 @@ public class CourseRepository {
 
     public static Optional<Course> find(Long id) {
         return entities.stream()
-                .filter(entity -> entity.getId() == id)
+                .filter(entity -> Objects.equals(entity.getId(), id))
                 .findAny();
     }
 

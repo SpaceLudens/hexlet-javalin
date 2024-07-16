@@ -19,6 +19,7 @@ import io.javalin.http.NotFoundResponse;
 import java.util.List;
 
 public class CoursesController {
+
     public static void index(Context context) {
         var term = context.queryParam("term");
         List<Course> courses;
@@ -68,26 +69,23 @@ public class CoursesController {
 
     public static void edit(Context context) {
         var id = context.pathParamAsClass("id", Long.class).get();
-        var user = UserRepository.find(id)
+        var course = CourseRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
-        var page = new UserPage(user);
+        var page = new CoursePage(course);
         context.render("users/edit.jte", model("page", page));
     }
 
     public static void update(Context context) {
         var id = context.pathParamAsClass("id", Long.class).get();
-
         var name = context.formParam("name");
-        var email = context.formParam("email");
-        var password = context.formParam("password");
+        var description = context.formParam("description");
 
-        var user = UserRepository.find(id)
+        var course = CourseRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password);
-        UserRepository.save(user);
-        context.redirect(usersPath());
+        course.setName(name);
+        course.setDescription(description);
+        CourseRepository.save(course);
+        context.redirect(coursesPath());
     }
 
     public static void destroy(Context context) {

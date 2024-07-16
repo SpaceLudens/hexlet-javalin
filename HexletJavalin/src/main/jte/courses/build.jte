@@ -15,17 +15,17 @@ content = @`
     <form action="/courses" method="post">
         <div>
             <label>
-                Название курса
+                Course name
                 <input type="text" name="name" value="${page.getName()}"/>
             </label>
         </div>
         <div>
             <label>
-                Описание курса
+                Course Description
                 <input type="text" name="description" value="${page.getDescription()}"/>
             </label>
         </div>
-        <input type="submit" value="Зарегистрировать" />
+        <input type="submit" value="Create" />
     </form>
 `
 )

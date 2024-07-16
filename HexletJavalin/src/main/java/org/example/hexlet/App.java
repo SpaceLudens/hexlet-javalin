@@ -2,12 +2,13 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
+
+import static io.javalin.rendering.template.TemplateUtil.model;
 import static org.example.hexlet.util.NamedRoutes.*;
 
 import org.example.hexlet.controller.CoursesController;
 import org.example.hexlet.controller.UsersController;
-
-import java.util.List;
+import org.example.hexlet.dto.MainPage;
 
 public class App {
     public static void main(String[] args) {
@@ -16,7 +17,13 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> ctx.render("index.jte"));
+        app.get("/", ctx -> {
+            var visited = Boolean.valueOf(ctx.cookie("visited"));
+            var page = new MainPage(visited);
+            ctx.render("index.jte", model("page", page));
+            ctx.cookie("visited", String.valueOf(true));
+
+        });
         //COURSES
         app.get(buildCoursesPath(), CoursesController::build);
         app.get(coursesPath("{id}"), CoursesController::show);
@@ -32,8 +39,8 @@ public class App {
         app.get(usersPath(), UsersController::index);
         app.post(usersPath(), UsersController::create);
         app.get("/users/{id}/edit", UsersController::edit);
-        app.patch("/users/{id}", UsersController::update);
-        app.delete("/users/{id}", UsersController::destroy);
+        app.patch(usersPath("{id}"), UsersController::update);
+        app.delete(usersPath("{id}"), UsersController::destroy);
 
         app.start(7070);
     }
