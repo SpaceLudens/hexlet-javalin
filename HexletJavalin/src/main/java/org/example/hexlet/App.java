@@ -7,8 +7,10 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 import static org.example.hexlet.util.NamedRoutes.*;
 
 import org.example.hexlet.controller.CoursesController;
+import org.example.hexlet.controller.SessionsController;
 import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.MainPage;
+import org.example.hexlet.util.NamedRoutes;
 
 public class App {
     public static void main(String[] args) {
@@ -18,11 +20,8 @@ public class App {
         });
 
         app.get("/", ctx -> {
-            var visited = Boolean.valueOf(ctx.cookie("visited"));
-            var page = new MainPage(visited);
+            var page = new MainPage(ctx.sessionAttribute("currentUser"));
             ctx.render("index.jte", model("page", page));
-            ctx.cookie("visited", String.valueOf(true));
-
         });
         //COURSES
         app.get(buildCoursesPath(), CoursesController::build);
@@ -41,6 +40,11 @@ public class App {
         app.get("/users/{id}/edit", UsersController::edit);
         app.patch(usersPath("{id}"), UsersController::update);
         app.delete(usersPath("{id}"), UsersController::destroy);
+
+        //SESSION
+        app.get(NamedRoutes.buildSessionsPath(), SessionsController::build);
+        app.post(NamedRoutes.sessionsPath(), SessionsController::create);
+        app.delete(NamedRoutes.sessionsPath(), SessionsController::destroy);
 
         app.start(7070);
     }

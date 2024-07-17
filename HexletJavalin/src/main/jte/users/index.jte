@@ -4,20 +4,20 @@
 
 @template.layout.page(
 content = @`
-    <form action="/users" method="get">
+    <form action="${NamedRoutes.usersPath()}" method="get">
         <input type="search" name="term" value="${page.getTerm()}">
-        <input type="submit" value="Искать">
+        <input type="submit" value="Search">
     </form>
     <div style="row row-cols-md-3 mb-3">
-        <h2>Список Пользователей</h2>
+        <h2>Users list</h2>
         <table class="table table-striped">
     @if(page.getUsers().isEmpty())
         <p>Пока не добавлено ни одного пользователя</p>
     @else
         <tr >
                 <th >ID</th>
-                <th>Имя</th>
-                <th>Почта</th>
+                <th>Name</th>
+                <th>Email</th>
             </tr>
             @for(var user : page.getUsers())
             <tr>
@@ -28,7 +28,7 @@ content = @`
             @endfor
     @endif
         </table>
-        <li><a href="/users/build">Добавить нового пользователя</a></li>
+        <li><a href="/users/build">Add new user</a></li>
     </div>
 `
 )

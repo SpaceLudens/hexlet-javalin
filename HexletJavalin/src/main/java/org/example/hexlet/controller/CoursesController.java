@@ -8,10 +8,8 @@ import io.javalin.validation.ValidationException;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
-import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
-import org.example.hexlet.repository.UserRepository;
 
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
