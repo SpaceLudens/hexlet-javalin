@@ -3,8 +3,9 @@
 @param CoursesPage page
 
 @template.layout.page(
+    page = page,
 content = @`
-    <form action="/courses" method="get">
+    <form action="${NamedRoutes.coursesPath()}" method="get">
         <input type="search" name="term" value="${page.getTerm()}" required="">
         <input type="submit" value="Искать">
     </form>

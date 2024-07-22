@@ -1,5 +1,8 @@
 @import gg.jte.Content
+@import org.example.hexlet.dto.BasePage
+
 @param Content content
+@param BasePage page = null
 
 <!doctype html>
 <html lang="ru">
@@ -30,6 +33,18 @@
     </div>
 
     <div class="mx-auto p-4 py-md-5">
+        @if(page != null && page.getFlash() != null)
+            @if(page.getFlash().equals("New user has been created"))
+                <div class="alert alert-success" role="alert">
+                    <p>${page.getFlash()}</p>
+                </div>
+            @endif
+            @if(page.getFlash().equals("Failed to create a new user"))
+                <div class="alert alert-warning" role="alert">
+                    <p>${page.getFlash()}</p>
+                </div>
+            @endif
+        @endif
         ${content}
     </div>
     </body>

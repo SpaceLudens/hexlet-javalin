@@ -30,6 +30,7 @@ public class UsersController {
             users = UserRepository.getEntities();
         }
         var page = new UsersPage(users, term);
+        page.setFlash(context.consumeSessionAttribute("flash"));
         context.render("users/index.jte", model("page", page));
     }
 
@@ -50,7 +51,6 @@ public class UsersController {
 
     public static void create(Context context) {
         try {
-
             var name = context.formParamAsClass("name", String.class)
                     .check(val -> val.length() > 2, "The length of the name cannot be less than 2")
                     .get()
@@ -65,13 +65,16 @@ public class UsersController {
                     .check(val -> val.equals(passwordConfirmation),"Passwords don't match")
                     .check(val -> val.length() > 6, "The password is not long enough")
                     .get();
+            context.sessionAttribute("flash","New user has been created");
             var user = new User(name, email, password);
             UserRepository.save(user);
             context.redirect("/users");
         } catch (ValidationException e) {
             var name = context.formParam("name");
             var email = context.formParam("email");
+            context.sessionAttribute("flash", "Failed to create a new user");
             var page = new BuildUserPage(name, email, e.getErrors());
+            page.setFlash(context.consumeSessionAttribute("flash"));
             context.render("users/build.jte", model("page", page));
         }
     }

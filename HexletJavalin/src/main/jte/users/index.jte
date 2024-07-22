@@ -3,6 +3,7 @@
 @param UsersPage page
 
 @template.layout.page(
+    page = page,
 content = @`
     <form action="${NamedRoutes.usersPath()}" method="get">
         <input type="search" name="term" value="${page.getTerm()}">

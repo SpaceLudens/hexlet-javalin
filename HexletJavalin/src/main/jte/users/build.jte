@@ -1,7 +1,9 @@
 @import org.example.hexlet.dto.users.BuildUserPage
+@import org.example.hexlet.util.NamedRoutes
 @param BuildUserPage page
 
 @template.layout.page(
+    page = page,
 content = @`
     @if(page.getErrors() != null)
         <ul>
@@ -13,7 +15,7 @@ content = @`
         </ul>
         @endif
 
-    <form action="/users" method="post">
+    <form action="${NamedRoutes.usersPath()}" method="post">
         <div>
             <label>
                 Имя

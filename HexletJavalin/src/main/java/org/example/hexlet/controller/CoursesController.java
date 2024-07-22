@@ -30,6 +30,7 @@ public class CoursesController {
             courses = CourseRepository.getEntities();
         }
         var page = new CoursesPage(courses, term);
+        page.setFlash(context.consumeSessionAttribute("flash"));
         context.render("courses/index.jte", model("page", page));
     }
 
@@ -56,6 +57,7 @@ public class CoursesController {
                     .get();
             var course = new Course(name, description);
             CourseRepository.save(course);
+            context.sessionAttribute("flash", "Course has been created!");
             context.redirect(coursesPath());
         } catch (ValidationException e) {
             var name = context.formParam("name");
