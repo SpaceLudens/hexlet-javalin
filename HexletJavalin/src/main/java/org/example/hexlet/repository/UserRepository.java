@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static org.eclipse.jetty.util.StringUtil.startsWithIgnoreCase;
 
-public class UserRepository {
+public class UserRepository extends BaseRepository{
     @Getter
     private static List<User> entities = new ArrayList<>();
 

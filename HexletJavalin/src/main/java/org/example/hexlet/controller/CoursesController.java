@@ -14,11 +14,12 @@ import org.example.hexlet.repository.CourseRepository;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class CoursesController {
 
-    public static void index(Context context) {
+    public static void index(Context context) throws SQLException {
         var term = context.queryParam("term");
         List<Course> courses;
         if (term != null) {
@@ -34,7 +35,7 @@ public class CoursesController {
         context.render("courses/index.jte", model("page", page));
     }
 
-    public static void show(Context context) {
+    public static void show(Context context) throws SQLException {
         var id = context.pathParamAsClass("id", Long.class).get();
         var course = CourseRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
@@ -42,12 +43,12 @@ public class CoursesController {
         context.render("courses/show.jte", model("page", page));
     }
 
-    public static void build(Context context) {
+    public static void build(Context context) throws SQLException {
         var page = new BuildCoursePage();
         context.render("courses/build.jte", model("page", page));
     }
 
-    public static void create(Context context) {
+    public static void create(Context context) throws SQLException {
         try {
             var name = context.formParamAsClass("name", String.class)
                     .check(val -> val.length() > 2, "Длинна названия курса не может быть меньше 2 символов")
@@ -67,7 +68,7 @@ public class CoursesController {
         }
     }
 
-    public static void edit(Context context) {
+    public static void edit(Context context) throws SQLException {
         var id = context.pathParamAsClass("id", Long.class).get();
         var course = CourseRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
@@ -75,7 +76,7 @@ public class CoursesController {
         context.render("users/edit.jte", model("page", page));
     }
 
-    public static void update(Context context) {
+    public static void update(Context context) throws SQLException {
         var id = context.pathParamAsClass("id", Long.class).get();
         var name = context.formParam("name");
         var description = context.formParam("description");
@@ -85,12 +86,6 @@ public class CoursesController {
         course.setName(name);
         course.setDescription(description);
         CourseRepository.save(course);
-        context.redirect(coursesPath());
-    }
-
-    public static void destroy(Context context) {
-        var id = context.pathParamAsClass("id", Long.class).get();
-        CourseRepository.delete(id);
         context.redirect(coursesPath());
     }
 }
