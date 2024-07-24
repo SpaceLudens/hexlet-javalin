@@ -1,13 +1,11 @@
 package org.example.hexlet.repository;
 
-import lombok.Getter;
 import org.example.hexlet.model.Course;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class CourseRepository extends BaseRepository{
@@ -45,7 +43,7 @@ public class CourseRepository extends BaseRepository{
     }
 
     public static List<Course> getEntities() throws SQLException {
-        var sql = "SELECT * FROM course";
+        var sql = "SELECT * FROM courses";
         try (var connection = dataSource.getConnection();
              var statement = connection.prepareStatement(sql)) {
             var resultSet = statement.executeQuery();
