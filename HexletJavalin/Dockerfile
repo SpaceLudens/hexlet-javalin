@@ -2,8 +2,8 @@ FROM gradle:8.3.0-jdk20
 
 WORKDIR /
 
-COPY /
+COPY / .
 
-RUN gradle installDist
+RUN ./gradlew installDist
 
 CMD ./build/install/HexletJavalin/bin/HexletJavalin
