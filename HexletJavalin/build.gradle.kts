@@ -4,11 +4,12 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     id("io.freefair.lombok") version "8.6"
     id("java")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
 
 application {
-    mainClass.set("org.example.hexlet.HelloWorld")
+    mainClass.set("org.example.hexlet.App")
 }
 
 group = "org.example"
